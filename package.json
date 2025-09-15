@@ -1,0 +1,25 @@
+{
+  "scripts": {
+    "prepare": "husky install",
+    "commitmsg": "commitlint --edit"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "eslint": "^9.35.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.1.6",
+    "prettier": "^3.6.2"
+  },
+  "lint-staged": {
+    "client/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write client/**/*.{js,jsx,ts,tsx}",
+      "eslint --fix --config client/eslint.config.js"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+@RoadGuard.Backend_HostAddress = http://localhost:5223
+
+GET {{RoadGuard.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,48 @@
+# Environment
+.env
+.env*.local
+
+# Node / Expo
+node_modules/
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# TypeScript
+*.tsbuildinfo
+
+# Example app
+app-example
+
+# Generated native folders
+/ios
+/android
+
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.vs/

@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: road-guard-server
+    volumes:
+      - ./server:/app
+      - /app/bin
+      - /app/obj
+    ports:
+      - "5000:5000"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: 1
+      DOTNET_RUNNING_IN_CONTAINER: true
+      DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER: 1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - road-guard-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: road-guard-db
+    restart: always
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - road-guard-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: road-guard-redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - road-guard-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  db_data:
+  redis_data:
+
+networks:
+  road-guard-network:
+    driver: bridge

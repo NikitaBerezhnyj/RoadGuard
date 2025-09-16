@@ -1,0 +1,6 @@
+dotnet_analyzer_diagnostic.category-Design.severity = warning
+
+dotnet_diagnostic.CA1515.severity = none
+
+dotnet_diagnostic.CA1052.severity = warning
+dotnet_diagnostic.S1118.severity = none

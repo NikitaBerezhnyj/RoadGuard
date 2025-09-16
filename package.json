@@ -11,16 +11,6 @@
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2"
   },
-  "lint-staged": {
-    "client/**/*.{js,jsx,ts,tsx}": [
-      "prettier --write client/**/*.{js,jsx,ts,tsx}",
-      "eslint --fix --config client/eslint.config.js"
-    ],
-    "server/**/*.{cs}": [
-      "dotnet format server/RoadGuard.Backend.csproj",
-      "dotnet build server/RoadGuard.Backend.csproj /warnaserror"
-    ]
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

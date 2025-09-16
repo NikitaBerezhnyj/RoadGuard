@@ -11,7 +11,7 @@ namespace RoadGuard.Backend.Controllers
         {
             return Ok(new
             {
-                status = "ok",
+                status = "200",
                 timestamp = DateTime.UtcNow
             });
         }

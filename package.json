@@ -17,8 +17,8 @@
       "eslint --fix --config client/eslint.config.js"
     ],
     "server/**/*.{cs}": [
-      "dotnet format RoadGuard.Backend.csproj",
-      "dotnet build RoadGuard.Backend.csproj /warnaserror"
+      "dotnet format server/RoadGuard.Backend.csproj",
+      "dotnet build server/RoadGuard.Backend.csproj /warnaserror"
     ]
   },
   "commitlint": {

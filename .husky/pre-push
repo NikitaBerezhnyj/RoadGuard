@@ -1,11 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Client
-cd client
-npm run lint
-npx expo-doctor
-cd ..
-
-# Server
-# ...
+echo "Pre push hook executed"

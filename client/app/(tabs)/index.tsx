@@ -33,6 +33,8 @@ export default function HomeScreen() {
     })();
   }, []);
 
+  // console.log
+
   if (!location) {
     return (
       <View style={[styles.loader, { backgroundColor: theme.background }]}>

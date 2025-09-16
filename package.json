@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "prepare": "husky install",
     "commitmsg": "commitlint --edit"
@@ -10,10 +11,5 @@
     "husky": "^8.0.0",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   }
 }

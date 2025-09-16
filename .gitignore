@@ -18,6 +18,9 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
+# Types
+expo-env.d.ts
+
 # Metro
 .metro-health-check*
 

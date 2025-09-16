@@ -1,21 +1,22 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from "react-native";
 
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#fff";
+const tintColorLight = "#0B79A3";
+const tintColorDark = "#00D1FF";
 
 export const Colors = {
   light: {
     text: "#11181C",
-    background: "#fff",
+    background: "#F7F9FA",
     tint: tintColorLight,
-    icon: "#687076",
-    tabIconDefault: "#687076",
-    tabIconSelected: tintColorLight
+    icon: "#6B7C85",
+    tabIconDefault: "#6B7C85",
+    tabIconSelected: tintColorLight,
+
+    driverGood: "#28C76F",
+    driverNeutral: "#FBC02D",
+    driverDanger: "#F44336",
+    dangerZoneStroke: "#F44336",
+    dangerZoneFill: "rgba(244, 67, 54, 0.2)"
   },
   dark: {
     text: "#ECEDEE",
@@ -23,19 +24,21 @@ export const Colors = {
     tint: tintColorDark,
     icon: "#9BA1A6",
     tabIconDefault: "#9BA1A6",
-    tabIconSelected: tintColorDark
+    tabIconSelected: tintColorDark,
+
+    driverGood: "#00E676",
+    driverNeutral: "#FFD600",
+    driverDanger: "#FF3D00",
+    dangerZoneStroke: "#FF3D00",
+    dangerZoneFill: "rgba(255, 61, 0, 0.2)"
   }
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: "system-ui",
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: "ui-monospace"
   },
   default: {

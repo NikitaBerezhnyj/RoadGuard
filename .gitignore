@@ -49,3 +49,5 @@ obj/
 *.user
 *.suo
 *.vs/
+
+.devnotes

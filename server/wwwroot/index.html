@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadGuard API</title>
+    <style>
+        :root {
+            --background-light: #F7F9FA;
+            --text-light: #11181C;
+            --tint-light: #0B79A3;
+            --container-bg: #FFFFFF;
+            --container-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 90%;
+            padding: 30px 20px;
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px var(--container-shadow);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        a.button {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--background-light);
+            background-color: var(--tint-light);
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            word-break: break-word;
+        }
+
+        a.button:hover {
+            background-color: #095f7f;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>RoadGuard API</h1>
+        <p>Welcome to the RoadGuard API!</p>
+        <p>API is running successfully.</p>
+        <a class="button" href="/swagger" target="_blank">Go to Swagger UI</a>
+    </div>
+</body>
+
+</html>

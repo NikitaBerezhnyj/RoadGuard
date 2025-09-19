@@ -1,33 +1,85 @@
+using RoadGuard.Data;
+using RoadGuard.Services;
+using RoadGuard.Repositories;
+using RoadGuard.Infrastructure;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder( args );
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+builder.Services.AddDbContext<AppDbContext>( options =>
+    options.UseNpgsql( builder.Configuration.GetConnectionString( "DefaultConnection" ) )
+           .UseSnakeCaseNamingConvention()
+           .EnableSensitiveDataLogging( builder.Environment.IsDevelopment() )
+           .EnableDetailedErrors( builder.Environment.IsDevelopment() )
+);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen( c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "RoadGuard API",
-        Version = "v1"
-    });
-});
+  c.SwaggerDoc( "v1", new OpenApiInfo
+  {
+    Title = "RoadGuard API",
+    Version = "v1"
+  } );
+} );
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ApplicationInitializer>();
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "RoadGuard API v1");
-    });
+  using (var scope = app.Services.CreateScope())
+  {
+    var initLogger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    initLogger.LogInformation( "🚀 Starting database initialization..." );
+
+    var initializer = scope.ServiceProvider.GetRequiredService<ApplicationInitializer>();
+    await initializer.InitializeDatabaseAsync().ConfigureAwait( false );
+
+    initLogger.LogInformation( "✅ Database initialization completed successfully" );
+  }
+}
+catch (Exception ex)
+{
+  var errorLogger = app.Services.GetRequiredService<ILogger<Program>>();
+  errorLogger.LogError( ex, "❌ Failed to initialize database" );
+  throw;
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+  app.UseDeveloperExceptionPage();
+  app.UseSwagger();
+  app.UseSwaggerUI( c =>
+  {
+    c.SwaggerEndpoint( "/swagger/v1/swagger.json", "RoadGuard API v1" );
+    c.RoutePrefix = "swagger";
+  } );
+}
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+if (!app.Environment.IsDevelopment())
+{
+  app.UseHttpsRedirection();
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
+app.MapFallbackToFile( "index.html" );
 
-app.Run();
+var appLogger = app.Services.GetRequiredService<ILogger<Program>>();
+appLogger.LogInformation( "🎯 RoadGuard API is ready to start!" );
+
+await app.RunAsync();

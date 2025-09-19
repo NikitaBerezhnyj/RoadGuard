@@ -1,8 +1,8 @@
-namespace RoadGuard.Models.DTO
+namespace RoadGuard.Models.DTO.Rating
 {
   public class RatingRequestDto
   {
     public Guid ToUserId { get; set; }
-    public int Value { get; set; } // +1 або -1
+    public int Value { get; set; }
   }
 }

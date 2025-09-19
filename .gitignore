@@ -50,6 +50,8 @@ obj/
 *.suo
 *.vs/
 
+Migrations
+
 appsettings.json
 
 .devnotes

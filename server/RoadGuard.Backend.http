@@ -14,8 +14,9 @@ POST {{API_URL}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "driver123456",
-  "password": "password123456",
+  "login": "driver123456@example.com",
+  "username": "driver123457",
+  "password": "password1234567",
   "carMake": "Toyota",
   "carColor": "Red",
   "isAnonymous": false
@@ -26,8 +27,8 @@ POST {{API_URL}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "driver12345",
-  "password": "password12345"
+  "login": "driver123456@example.com",
+  "password": "password1234567"
 }
 
 ### === USER ===

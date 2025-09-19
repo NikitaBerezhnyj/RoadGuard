@@ -6,8 +6,11 @@ namespace RoadGuard.Models.Entities
   public class User
   {
     public Guid Id { get; set; }
-    public string Username { get; set; } = null!;
+
+    public string Login { get; set; } = null!;
     public string PasswordHash { get; set; } = null!;
+
+    public string Username { get; set; } = null!;
 
     public string? CarMake { get; set; }
     public string? CarColor { get; set; }
@@ -21,4 +24,5 @@ namespace RoadGuard.Models.Entities
     [JsonIgnore]
     public ICollection<DriverRating> RatingsReceived { get; set; } = new List<DriverRating>();
   }
+
 }

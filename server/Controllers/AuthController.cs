@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using RoadGuard.Models.DTO;
+using RoadGuard.Models.DTO.Auth;
 using RoadGuard.Services;
 
 namespace RoadGuard.Backend.Controllers
@@ -21,6 +21,16 @@ namespace RoadGuard.Backend.Controllers
         return BadRequest( "Username is required" );
 
       var exists = await _authService.CheckUsernameExistsAsync( username ).ConfigureAwait( false );
+      return Ok( new { exists } );
+    }
+
+    [HttpGet( "check-login" )]
+    public async Task<IActionResult> CheckLogin( [FromQuery] string login )
+    {
+      if (string.IsNullOrWhiteSpace( login ))
+        return BadRequest( "Login is required" );
+
+      var exists = await _authService.CheckLoginExistsAsync( login ).ConfigureAwait( false );
       return Ok( new { exists } );
     }
 

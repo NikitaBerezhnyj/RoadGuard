@@ -12,9 +12,9 @@ builder.Logging.AddConsole();
 
 builder.Services.AddDbContext<AppDbContext>( options =>
     options.UseNpgsql( builder.Configuration.GetConnectionString( "DefaultConnection" ) )
-           .UseSnakeCaseNamingConvention()
-           .EnableSensitiveDataLogging( builder.Environment.IsDevelopment() )
-           .EnableDetailedErrors( builder.Environment.IsDevelopment() )
+          .UseSnakeCaseNamingConvention()
+          .EnableSensitiveDataLogging( builder.Environment.IsDevelopment() )
+          .EnableDetailedErrors( builder.Environment.IsDevelopment() )
 );
 
 builder.Services.AddEndpointsApiExplorer();
@@ -87,4 +87,4 @@ app.MapFallbackToFile( "index.html" );
 var appLogger = app.Services.GetRequiredService<ILogger<Program>>();
 appLogger.LogInformation( "🎯 RoadGuard API is ready to start!" );
 
-await app.RunAsync();
+await app.RunAsync().ConfigureAwait( false );

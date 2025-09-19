@@ -1,4 +1,6 @@
-namespace RoadGuard.Models.DTO
+using RoadGuard.Models.DTO.User;
+
+namespace RoadGuard.Models.DTO.Auth
 {
   public class AuthResponse
   {

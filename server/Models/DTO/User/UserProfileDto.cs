@@ -1,4 +1,4 @@
-namespace RoadGuard.Models.DTO
+namespace RoadGuard.Models.DTO.User
 {
   public class UserProfileDto
   {

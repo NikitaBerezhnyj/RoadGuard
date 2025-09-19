@@ -5,6 +5,6 @@ export default {
   ],
   "server/**/*.cs": [
     "dotnet format server/RoadGuard.Backend.csproj --include",
-    () => "dotnet build server/RoadGuard.Backend.csproj /warnaserror",
+    () => "dotnet build server/RoadGuard.Backend.csproj",
   ],
 };

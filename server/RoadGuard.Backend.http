@@ -1,6 +1,29 @@
-@RoadGuard.Backend_HostAddress = http://localhost:5223
+@API_URL = http://localhost:5000/api
 
-GET {{RoadGuard.Backend_HostAddress}}/weatherforecast/
+### Health check
+GET {{API_URL}}/health
 Accept: application/json
 
-###
+### === AUTH ===
+### Check username
+GET {{API_URL}}/auth/check-username?username=driver123
+### Registration
+POST {{API_URL}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "driver123",
+  "password": "password123",
+  "carMake": "Toyota",
+  "carColor": "Red",
+  "isAnonymous": false
+}
+
+### Login
+POST {{API_URL}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "driver123",
+  "password": "password123"
+}

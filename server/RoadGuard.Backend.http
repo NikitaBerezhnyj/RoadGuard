@@ -1,4 +1,6 @@
 @API_URL = http://localhost:5000/api
+@FIRST_USER_ID = 019961a4-6cdc-7070-9a09-b324c92b20d3
+@SECOND_USER_ID = 01996145-8243-7048-b20a-95f6f47e8033
 
 ### Health check
 GET {{API_URL}}/health
@@ -12,8 +14,8 @@ POST {{API_URL}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "driver123",
-  "password": "password123",
+  "username": "driver123456",
+  "password": "password123456",
   "carMake": "Toyota",
   "carColor": "Red",
   "isAnonymous": false
@@ -24,6 +26,46 @@ POST {{API_URL}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "driver123",
-  "password": "password123"
+  "username": "driver12345",
+  "password": "password12345"
+}
+
+### === USER ===
+### GET User
+GET {{API_URL}}/users/{{FIRST_USER_ID}}
+
+### Update User
+PUT {{API_URL}}/users/{{FIRST_USER_ID}}
+Content-Type: application/json
+
+{
+  "carMake": "Toyota",
+  "carColor": "Blue",
+  "isAnonymous": true
+}
+
+### Delete User
+DELETE {{API_URL}}/users/{{FIRST_USER_ID}}
+
+### === RATINGS ===
+### Get Ratings for User
+GET {{API_URL}}/users/{{FIRST_USER_ID}}/ratings
+Accept: application/json
+
+### Rate User (Like / Dislike)
+POST {{API_URL}}/users/{{FIRST_USER_ID}}/ratings
+Content-Type: application/json
+
+{
+  "fromUserId": "01996145-a3e4-7108-ad0a-0d688784ec67",
+  "value": 1
+}
+
+### Rate User (Dislike)
+POST {{API_URL}}/users/{{FIRST_USER_ID}}/ratings
+Content-Type: application/json
+
+{
+  "fromUserId": "01996145-8243-7048-b20a-95f6f47e8033",
+  "value": 1
 }

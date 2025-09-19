@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace RoadGuard.Models.Entities
 {
@@ -12,10 +13,12 @@ namespace RoadGuard.Models.Entities
     public string? CarColor { get; set; }
     public bool IsAnonymous { get; set; }
 
-    public double ReputationScore { get; set; } = 0;
+    public double ReputationScore { get; set; } = 5;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    [JsonIgnore]
     public ICollection<DriverRating> RatingsGiven { get; set; } = new List<DriverRating>();
+    [JsonIgnore]
     public ICollection<DriverRating> RatingsReceived { get; set; } = new List<DriverRating>();
   }
 }

@@ -16,6 +16,23 @@ namespace RoadGuard.Repositories
       _logger = logger;
     }
 
+    public async Task<User?> GetByIdAsync(Guid id)
+    {
+        try
+        {
+            return await _dbContext.Users
+                .Include(u => u.RatingsGiven)
+                .Include(u => u.RatingsReceived)
+                .FirstOrDefaultAsync(u => u.Id == id)
+                .ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error querying user by Id: {Id}", id);
+            throw;
+        }
+    }
+
     public async Task<User?> GetByUsernameAsync( string username )
     {
       try
@@ -42,6 +59,34 @@ namespace RoadGuard.Repositories
         _logger.LogError( ex, "Error adding user: {Username}", user.Username );
         throw;
       }
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        try
+        {
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating user: {Username}", user.Username);
+            throw;
+        }
+    }
+
+    public async Task DeleteAsync(User user)
+    {
+        try
+        {
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting user: {Username}", user.Username);
+            throw;
+        }
     }
   }
 }

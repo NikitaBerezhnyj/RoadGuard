@@ -28,7 +28,12 @@ builder.Services.AddSwaggerGen( c =>
 } );
 
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<DriverRatingRepository>();
+
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<RatingService>();
+
 builder.Services.AddScoped<ApplicationInitializer>();
 
 builder.Services.AddControllers();

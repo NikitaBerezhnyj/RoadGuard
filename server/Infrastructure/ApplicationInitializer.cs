@@ -33,7 +33,6 @@ namespace RoadGuard.Infrastructure
         }
         _logger.LogInformation( "✅ Database connection successful" );
 
-        // Перевіряємо чи база даних створена
         var created = await dbContext.Database.EnsureCreatedAsync().ConfigureAwait( false );
 
         if (created)

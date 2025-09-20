@@ -40,6 +40,8 @@ builder.Services.AddScoped<ApplicationInitializer>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddHostedService<PeriodicTasksWorker>();
+
 var app = builder.Build();
 
 try

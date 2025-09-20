@@ -82,9 +82,8 @@ Content-Type: application/json
   "longitude": 30.5234,
   "radiusMeters": 100,
   "comment": "Dangerous driving near this area",
-  "ttlSeconds": 300
+  "ttlSeconds": 60
 }
-
 
 ### Get All Reports
 GET {{API_URL}}/reports/active

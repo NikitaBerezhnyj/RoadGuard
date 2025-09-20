@@ -1,6 +1,7 @@
 @API_URL = http://localhost:5000/api
 @FIRST_USER_ID = 019961a4-6cdc-7070-9a09-b324c92b20d3
 @SECOND_USER_ID = 01996145-8243-7048-b20a-95f6f47e8033
+@REPORT_ID = e008bf16-106a-40f2-9c4e-e614ef7f7a86
 
 ### Health check
 GET {{API_URL}}/health
@@ -70,3 +71,28 @@ Content-Type: application/json
   "fromUserId": "01996145-8243-7048-b20a-95f6f47e8033",
   "value": 1
 }
+
+### === REPORTS ===
+### Create Report
+POST {{API_URL}}/reports
+Content-Type: application/json
+
+{
+  "latitude": 50.4501,
+  "longitude": 30.5234,
+  "radiusMeters": 100,
+  "comment": "Dangerous driving near this area",
+  "ttlSeconds": 300
+}
+
+
+### Get All Reports
+GET {{API_URL}}/reports/active
+Accept: application/json
+
+### Get Report By Id
+GET {{API_URL}}/reports/{{REPORT_ID}}
+Accept: application/json
+
+### Delete Report
+DELETE {{API_URL}}/reports/{{REPORT_ID}}

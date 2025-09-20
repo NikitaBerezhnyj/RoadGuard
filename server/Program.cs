@@ -29,10 +29,12 @@ builder.Services.AddSwaggerGen( c =>
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<DriverRatingRepository>();
+builder.Services.AddScoped<ReportRepository>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<RatingService>();
+builder.Services.AddScoped<ReportService>();
 
 builder.Services.AddScoped<ApplicationInitializer>();
 

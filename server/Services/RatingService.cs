@@ -15,33 +15,33 @@ namespace RoadGuard.Services
     public RatingService(
         DriverRatingRepository ratingRepository,
         UserRepository userRepository,
-        ILogger<RatingService> logger )
+        ILogger<RatingService> logger)
     {
       _ratingRepository = ratingRepository;
       _userRepository = userRepository;
       _logger = logger;
     }
 
-    public async Task<List<DriverRating>> GetRatingsAsync( Guid userId )
+    public async Task<List<DriverRating>> GetRatingsAsync(Guid userId)
     {
-      var user = await _userRepository.GetByIdAsync( userId ).ConfigureAwait( false );
-      if (user == null) throw new Exception( "User not found" );
+      var user = await _userRepository.GetByIdAsync(userId).ConfigureAwait(false);
+      if (user == null) throw new Exception("User not found");
 
-      return await _ratingRepository.GetRatingsForUserAsync( userId ).ConfigureAwait( false );
+      return await _ratingRepository.GetRatingsForUserAsync(userId).ConfigureAwait(false);
     }
 
-    public async Task RateUserAsync( Guid userId, RateDriverRequest request )
+    public async Task RateUserAsync(Guid userId, RateDriverRequest request)
     {
       if (request.Value != 1 && request.Value != -1)
-        throw new ArgumentException( "Rating value must be 1 or -1" );
+        throw new ArgumentException("Rating value must be 1 or -1");
 
-      var fromUser = await _userRepository.GetByIdAsync( request.FromUserId ).ConfigureAwait( false );
-      var toUser = await _userRepository.GetByIdAsync( userId ).ConfigureAwait( false );
+      var fromUser = await _userRepository.GetByIdAsync(request.FromUserId).ConfigureAwait(false);
+      var toUser = await _userRepository.GetByIdAsync(userId).ConfigureAwait(false);
 
       if (fromUser == null || toUser == null)
-        throw new Exception( "User not found" );
+        throw new Exception("User not found");
 
-      var existingRating = await _ratingRepository.GetRatingByUsersAsync( request.FromUserId, userId ).ConfigureAwait( false );
+      var existingRating = await _ratingRepository.GetRatingByUsersAsync(request.FromUserId, userId).ConfigureAwait(false);
 
       if (existingRating != null)
       {
@@ -59,23 +59,23 @@ namespace RoadGuard.Services
           FromUser = fromUser,
           ToUser = toUser
         };
-        await _ratingRepository.AddRatingAsync( existingRating ).ConfigureAwait( false );
+        await _ratingRepository.AddRatingAsync(existingRating).ConfigureAwait(false);
       }
 
-      toUser.ReputationScore = CalculateNewRating( toUser, existingRating );
+      toUser.ReputationScore = CalculateNewRating(toUser, existingRating);
 
-      await _userRepository.UpdateAsync( toUser ).ConfigureAwait( false );
+      await _userRepository.UpdateAsync(toUser).ConfigureAwait(false);
     }
 
-    private double CalculateWeight( User fromUser, User toUser )
+    private double CalculateWeight(User fromUser, User toUser)
     {
-      double reputationFactor = Math.Min( 1, fromUser.ReputationScore / 5.0 );
+      double reputationFactor = Math.Min(1, fromUser.ReputationScore / 5.0);
 
       double daysInSystem = (DateTime.UtcNow - fromUser.CreatedAt).TotalDays;
-      double experienceFactor = Math.Min( 1, daysInSystem / 30.0 );
+      double experienceFactor = Math.Min(1, daysInSystem / 30.0);
 
       int ratingsCount = toUser.RatingsReceived?.Count ?? 0;
-      double stabilityFactor = 1.0 / Math.Max( 1, ratingsCount );
+      double stabilityFactor = 1.0 / Math.Max(1, ratingsCount);
 
       double weight = (0.5 + 0.5 * reputationFactor * experienceFactor) * stabilityFactor;
 
@@ -83,17 +83,17 @@ namespace RoadGuard.Services
     }
 
 
-    private double CalculateNewRating( User toUser, DriverRating newRating )
+    private double CalculateNewRating(User toUser, DriverRating newRating)
     {
       var allRatings = toUser.RatingsReceived.ToList();
 
-      double weight = CalculateWeight( newRating.FromUser, toUser );
+      double weight = CalculateWeight(newRating.FromUser, toUser);
 
       double delta = weight * newRating.Value;
 
       double currentRating = toUser.ReputationScore;
 
-      double newRatingValue = Math.Max( 0, Math.Min( 5, currentRating + delta ) );
+      double newRatingValue = Math.Max(0, Math.Min(5, currentRating + delta));
 
       return newRatingValue;
     }

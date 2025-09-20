@@ -10,54 +10,54 @@ namespace RoadGuard.Repositories
     private readonly AppDbContext _dbContext;
     private readonly ILogger<DriverRatingRepository> _logger;
 
-    public DriverRatingRepository( AppDbContext dbContext, ILogger<DriverRatingRepository> logger )
+    public DriverRatingRepository(AppDbContext dbContext, ILogger<DriverRatingRepository> logger)
     {
       _dbContext = dbContext;
       _logger = logger;
     }
 
-    public async Task<List<DriverRating>> GetRatingsForUserAsync( Guid userId )
+    public async Task<List<DriverRating>> GetRatingsForUserAsync(Guid userId)
     {
       try
       {
         return await _dbContext.DriverRatings
-            .Include( r => r.FromUser )
-            .Where( r => r.ToUserId == userId )
+            .Include(r => r.FromUser)
+            .Where(r => r.ToUserId == userId)
             .ToListAsync()
-            .ConfigureAwait( false );
+            .ConfigureAwait(false);
       }
       catch (Exception ex)
       {
-        _logger.LogError( ex, "Error getting ratings for user {UserId}", userId );
+        _logger.LogError(ex, "Error getting ratings for user {UserId}", userId);
         throw;
       }
     }
 
-    public async Task AddRatingAsync( DriverRating rating )
+    public async Task AddRatingAsync(DriverRating rating)
     {
       try
       {
-        await _dbContext.DriverRatings.AddAsync( rating ).ConfigureAwait( false );
-        await _dbContext.SaveChangesAsync().ConfigureAwait( false );
+        await _dbContext.DriverRatings.AddAsync(rating).ConfigureAwait(false);
+        await _dbContext.SaveChangesAsync().ConfigureAwait(false);
       }
       catch (Exception ex)
       {
-        _logger.LogError( ex, "Error adding rating from {FromUserId} to {ToUserId}", rating.FromUserId, rating.ToUserId );
+        _logger.LogError(ex, "Error adding rating from {FromUserId} to {ToUserId}", rating.FromUserId, rating.ToUserId);
         throw;
       }
     }
 
-    public async Task<DriverRating?> GetRatingByUsersAsync( Guid fromUserId, Guid toUserId )
+    public async Task<DriverRating?> GetRatingByUsersAsync(Guid fromUserId, Guid toUserId)
     {
       try
       {
         return await _dbContext.DriverRatings
-            .FirstOrDefaultAsync( r => r.FromUserId == fromUserId && r.ToUserId == toUserId )
-            .ConfigureAwait( false );
+            .FirstOrDefaultAsync(r => r.FromUserId == fromUserId && r.ToUserId == toUserId)
+            .ConfigureAwait(false);
       }
       catch (Exception ex)
       {
-        _logger.LogError( ex, "Error getting rating from {FromUserId} to {ToUserId}", fromUserId, toUserId );
+        _logger.LogError(ex, "Error getting rating from {FromUserId} to {ToUserId}", fromUserId, toUserId);
         throw;
       }
     }

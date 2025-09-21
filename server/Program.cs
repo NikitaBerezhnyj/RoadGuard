@@ -1,5 +1,7 @@
 using RoadGuard.Data;
+using RoadGuard.Hubs;
 using RoadGuard.Services;
+using StackExchange.Redis;
 using RoadGuard.Repositories;
 using RoadGuard.Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -11,11 +13,14 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString"))
           .UseSnakeCaseNamingConvention()
           .EnableSensitiveDataLogging(builder.Environment.IsDevelopment())
           .EnableDetailedErrors(builder.Environment.IsDevelopment())
 );
+
+builder.Services.AddSignalR()
+    .AddStackExchangeRedis(builder.Configuration.GetConnectionString("RedisConnectionString"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -64,6 +69,24 @@ catch (Exception ex)
   throw;
 }
 
+try
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnectionString");
+        var redis = ConnectionMultiplexer.Connect(redisConnectionString);
+
+        var pong = redis.GetDatabase().Ping();
+        logger.LogInformation("✅ Successfully connected to Redis! Ping: {PingTime} ms", pong.TotalMilliseconds);
+    }
+}
+catch (Exception ex)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "❌ Failed to connect to Redis");
+}
+
 if (app.Environment.IsDevelopment())
 {
   app.UseDeveloperExceptionPage();
@@ -86,6 +109,7 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<RoadGuardHub>("/Hubs/RoadGuardHub");
 app.MapFallbackToFile("index.html");
 
 var appLogger = app.Services.GetRequiredService<ILogger<Program>>();

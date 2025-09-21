@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using RoadGuard.Data;
+using RoadGuard.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace RoadGuard.Infrastructure
@@ -41,6 +42,7 @@ namespace RoadGuard.Infrastructure
             {
                 using var scope = _serviceProvider.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var reportService = scope.ServiceProvider.GetRequiredService<ReportService>();
 
                 var now = DateTime.UtcNow;
                 var expiredReports = await db.Reports
@@ -49,8 +51,13 @@ namespace RoadGuard.Infrastructure
 
                 if (expiredReports.Any())
                 {
+                    var ids = expiredReports.Select(r => r.Id).ToList();
+
                     db.Reports.RemoveRange(expiredReports);
                     await db.SaveChangesAsync(stoppingToken);
+
+                    await reportService.ExpireReportsAsync(ids);
+
                     _logger.LogInformation("Removed {count} expired reports", expiredReports.Count);
                 }
             }

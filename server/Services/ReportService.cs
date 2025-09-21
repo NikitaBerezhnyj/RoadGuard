@@ -1,16 +1,20 @@
+using Microsoft.AspNetCore.SignalR;
 using RoadGuard.Models.DTO.Report;
 using RoadGuard.Models.Entities;
 using RoadGuard.Repositories;
+using RoadGuard.Hubs;
 
 namespace RoadGuard.Services
 {
   public class ReportService
   {
     private readonly ReportRepository _reportRepository;
+    private readonly IHubContext<RoadGuardHub> _hubContext;
 
-    public ReportService(ReportRepository reportRepository)
+    public ReportService(ReportRepository reportRepository, IHubContext<RoadGuardHub> hubContext)
     {
       _reportRepository = reportRepository;
+      _hubContext = hubContext;
     }
 
     public async Task<Report?> GetReportAsync(Guid id)
@@ -38,7 +42,16 @@ namespace RoadGuard.Services
 
       await _reportRepository.AddAsync(report).ConfigureAwait(false);
 
-      // TODO: ReportCreated → повідомити клієнтів через SignalR
+      await _hubContext.Clients.All.SendAsync("ReportCreated", new
+      {
+        report.Id,
+        report.Latitude,
+        report.Longitude,
+        report.RadiusMeters,
+        report.Comment,
+        report.CreatedAt,
+        report.ExpiresAt
+      });
 
       return report;
     }
@@ -50,9 +63,17 @@ namespace RoadGuard.Services
 
       await _reportRepository.DeleteAsync(report).ConfigureAwait(false);
 
-      // TODO: ReportDeleted → повідомити клієнтів через SignalR
+      await _hubContext.Clients.All.SendAsync("ReportExpired", report.Id);
 
       return true;
+    }
+
+    public async Task ExpireReportsAsync(List<Guid> expiredIds)
+    {
+      foreach (var id in expiredIds)
+      {
+        await _hubContext.Clients.All.SendAsync("ReportExpired", id);
+      }
     }
   }
 }

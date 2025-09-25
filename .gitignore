@@ -2,6 +2,8 @@
 .env
 .env*.local
 
+expo-env.d.ts
+
 # Node / Expo
 node_modules/
 .expo/
@@ -53,5 +55,7 @@ obj/
 Migrations
 
 appsettings.json
+
+.vscode
 
 .devnotes

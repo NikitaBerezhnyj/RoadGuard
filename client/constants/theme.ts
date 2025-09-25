@@ -34,6 +34,22 @@ export const Colors = {
   }
 };
 
+export const Sizes = {
+  small: 16,
+  medium: 24,
+  large: 40,
+  xlarge: 60
+};
+
+export const Spaces = {
+  tiny: 4,
+  small: 8,
+  medium: 16,
+  large: 24,
+  xlarge: 32,
+  xxlarge: 48
+};
+
 export const Fonts = Platform.select({
   ios: {
     sans: "system-ui",
